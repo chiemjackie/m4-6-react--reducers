@@ -4,7 +4,7 @@ import GlobalStyles from "./GlobalStyles";
 
 function App() {
   const {
-    state: { numOfRows },
+    state: { hasLoaded, seats, numOfRows, seatsPerRow },
     actions: { receiveSeatInfoFromServer },
   } = useContext(SeatContext);
 
@@ -14,10 +14,12 @@ function App() {
       .then((data) => receiveSeatInfoFromServer(data));
   }, []);
 
+  console.log(hasLoaded);
+
   return (
     <>
       <GlobalStyles />
-      This venue has {numOfRows} rows!
+      This venue has {numOfRows} rows and {seatsPerRow} seats per row.
     </>
   );
 }
