@@ -10,7 +10,22 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  // TODO
+  switch (action.type) {
+    case "GET-SEAT-INFO": {
+      const { bookedSeats, numOfRows, seatsPerRow } = action;
+      return {
+        hasLoaded: true,
+        seats: bookedSeats,
+        numOfRows: numOfRows,
+        seatsPerRow: seatsPerRow,
+      };
+    }
+
+    default: {
+      console.log("Error in reducer");
+      throw new Error(`Unrecognized action: ${action.type}`);
+    }
+  }
 }
 
 export const SeatProvider = ({ children }) => {
@@ -27,9 +42,7 @@ export const SeatProvider = ({ children }) => {
     <SeatContext.Provider
       value={{
         state,
-        actions: {
-          receiveSeatInfoFromServer,
-        },
+        actions: { receiveSeatInfoFromServer },
       }}
     >
       {children}
