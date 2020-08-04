@@ -4,36 +4,32 @@ export const SeatContext = createContext();
 
 const initialState = {
   hasLoaded: false,
-  seats: null,
+  bookedSeats: null,
   numOfRows: 0,
   seatsPerRow: 0,
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case "GET-SEAT-INFO": {
-      const { bookedSeats, numOfRows, seatsPerRow } = action;
+    case "receive-seat-info-from-server":
       return {
+        ...state,
         hasLoaded: true,
-        seats: bookedSeats,
-        numOfRows: numOfRows,
-        seatsPerRow: seatsPerRow,
+        bookedSeats: action.bookedSeats,
+        numOfRows: action.numOfRows,
+        seatsPerRow: action.seatsPerRow,
       };
-    }
-
-    default: {
-      console.log("Error in reducer");
+    default:
       throw new Error(`Unrecognized action: ${action.type}`);
-    }
   }
 }
 
-export const SeatProvider = ({ children }) => {
+export function SeatProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const receiveSeatInfoFromServer = (data) => {
     dispatch({
-      type: "GET-SEAT-INFO",
+      type: "receive-seat-info-from-server",
       ...data,
     });
   };
@@ -42,10 +38,12 @@ export const SeatProvider = ({ children }) => {
     <SeatContext.Provider
       value={{
         state,
-        actions: { receiveSeatInfoFromServer },
+        actions: {
+          receiveSeatInfoFromServer,
+        },
       }}
     >
       {children}
     </SeatContext.Provider>
   );
-};
+}
